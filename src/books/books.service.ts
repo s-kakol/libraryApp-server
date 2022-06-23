@@ -10,7 +10,7 @@ import { CreateBookDto } from './dtos/create-book.dto';
 import { EditBookDto } from './dtos/edit-book.dto';
 
 @Injectable()
-export class BookService {
+export class BooksService {
   constructor(
     @InjectModel(Book.name) private readonly bookModel: Model<BookDocument>,
   ) {}

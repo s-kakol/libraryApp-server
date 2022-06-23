@@ -8,14 +8,14 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { BookService } from './books.service';
+import { BooksService } from './books.service';
 import { Book } from './book.schema';
 import { CreateBookDto } from './dtos/create-book.dto';
 import { EditBookDto } from './dtos/edit-book.dto';
 
 @Controller('books')
 export class BooksController {
-  constructor(private readonly bookService: BookService) {}
+  constructor(private readonly bookService: BooksService) {}
 
   @Get()
   async getBooks(): Promise<Book[]> {
