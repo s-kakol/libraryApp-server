@@ -5,49 +5,26 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Book } from './book.model';
+import { Book, BookDocument } from './book.schema';
+import { CreateBookDto } from './dtos/create-book.dto';
+import { EditBookDto } from './dtos/edit-book.dto';
 
 @Injectable()
 export class BookService {
-  constructor(@InjectModel('Book') private readonly bookModel: Model<Book>) {}
+  constructor(
+    @InjectModel(Book.name) private readonly bookModel: Model<BookDocument>,
+  ) {}
 
-  async createBook(
-    title: string,
-    author: string,
-    description: string,
-    total: number,
-    available: number,
-  ): Promise<Book> {
-    const newBook = new this.bookModel({
-      title,
-      author,
-      description,
-      total,
-      available,
-    });
-
-    const result = await newBook.save();
-    return result as Book;
+  async findAll(): Promise<Book[]> {
+    return this.bookModel.find().exec();
   }
 
-  async readBooks(): Promise<Book[]> {
-    const result = await this.bookModel.find({}).exec();
-    return result.map((b) => ({
-      id: b.id,
-      title: b.title,
-      author: b.author,
-      description: b.description,
-      total: b.total,
-      available: b.available,
-    }));
-  }
-
-  async readBookById(id: string): Promise<Book> {
-    let result;
+  async findOneById(id: string): Promise<Book> {
+    let result: BookDocument;
     try {
       result = await this.bookModel.findById(id).exec();
     } catch (error) {
-      throw new BadRequestException('Malformatted or wrong id');
+      throw new BadRequestException('Malformed or wrong id');
     }
     if (!result) {
       throw new NotFoundException('Could not find book with given id.');
@@ -55,39 +32,22 @@ export class BookService {
     return result;
   }
 
-  async updateBook(
-    id: string,
-    title: string,
-    author: string,
-    description: string,
-    total: number,
-    available: number,
-  ): Promise<Book> {
-    const updatedBook = await this.bookModel.findById(id).exec();
-    if (title) {
-      updatedBook.title = title;
-    }
-    if (author) {
-      updatedBook.author = author;
-    }
-    if (description) {
-      updatedBook.description = description;
-    }
-    if (total) {
-      updatedBook.total = total;
-    }
-    if (available) {
-      updatedBook.available = available;
-    }
-
-    const result = await updatedBook.save();
-    return result;
+  async create(createBookDto: CreateBookDto): Promise<Book> {
+    const createdBook = new this.bookModel(createBookDto);
+    createdBook.createdAt = new Date();
+    return createdBook.save();
   }
 
-  async removeBook(id: string) {
+  async remove(id: string): Promise<void> {
     const result = await this.bookModel.deleteOne({ _id: id }).exec();
     if (result.deletedCount === 0) {
       throw new NotFoundException('Could not find book with given id.');
     }
+  }
+
+  async edit(id: string, editBookData: EditBookDto) {
+    return await this.bookModel.findByIdAndUpdate(id, editBookData, {
+      new: true,
+    });
   }
 }

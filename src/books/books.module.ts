@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { BookSchema } from './book.model';
+import { BookSchema } from './book.schema';
 import { BooksController } from './books.controller';
 import { BookService } from './books.service';
 
