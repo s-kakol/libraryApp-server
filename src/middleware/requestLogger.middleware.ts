@@ -7,6 +7,7 @@ export class RequestLoggerMiddleware implements NestMiddleware {
     Logger.log(`Method: ${req.method}`, 'Request');
     Logger.log(`Path:   ${req.path}`, 'Request');
     Logger.log(`Body:   ${JSON.stringify(req.body)}`, 'Request');
+    Logger.log(`---`, 'Request');
     next();
   }
 }
