@@ -24,9 +24,6 @@ import { ConfigurationService } from './config/configuration.service';
         return options;
       },
     }),
-    // MongooseModule.forRoot(
-    //   'mongodb+srv://fs-mongo:admin1@cluster0.4n0ze.mongodb.net/libraryApp',
-    // ),
   ],
   controllers: [AppController],
   providers: [AppService],
