@@ -11,7 +11,7 @@ export class CreateBookDto {
   publisher: string;
 
   @IsNumber()
-  releaseYear: number;
+  publicationYear: number;
 
   @IsArray()
   reviews: string[];
@@ -30,4 +30,13 @@ export class CreateBookDto {
 
   @IsNumber()
   copiesAvailable: number;
+
+  @IsNumber()
+  price: number;
+
+  @IsNumber()
+  pages: number;
+
+  @IsNumber()
+  isbn: number;
 }

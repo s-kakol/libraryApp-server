@@ -15,7 +15,7 @@ export class Book {
   publisher: string;
 
   @Prop({ required: true })
-  releaseYear: number;
+  publicationYear: number;
 
   @Prop({ required: true, type: [String] })
   reviews: string[];
@@ -34,6 +34,15 @@ export class Book {
 
   @Prop({ required: true })
   copiesAvailable: number;
+
+  @Prop({ required: true })
+  price: number;
+
+  @Prop({ required: true })
+  pages: number;
+
+  @Prop({ required: true })
+  isbn: number;
 
   @Prop({ required: true })
   createdAt: Date;
