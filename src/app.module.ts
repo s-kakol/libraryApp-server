@@ -5,6 +5,8 @@ import { RequestLoggerMiddleware } from './middleware/requestLogger.middleware';
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { ConfigurationModule } from './config/configuration.module';
 import { ConfigurationService } from './config/configuration.service';
+import { BooksModule } from './books/books.module';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -24,6 +26,13 @@ import { ConfigurationService } from './config/configuration.service';
         return options;
       },
     }),
+    RouterModule.register([
+      {
+        path: 'books',
+        module: BooksModule,
+      },
+    ]),
+    BooksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
