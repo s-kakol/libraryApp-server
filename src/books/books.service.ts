@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Book, BookDocument } from './book.schema';
+import { Book, BookDocument } from './schemas/book.schema';
 import { CreateBookDto } from './dtos/create-book.dto';
 import { EditBookDto } from './dtos/edit-book.dto';
 

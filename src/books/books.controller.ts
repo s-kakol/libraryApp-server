@@ -9,7 +9,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
-import { Book } from './book.schema';
+import { Book } from './schemas/book.schema';
 import { CreateBookDto } from './dtos/create-book.dto';
 import { EditBookDto } from './dtos/edit-book.dto';
 
