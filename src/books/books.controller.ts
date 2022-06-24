@@ -19,27 +19,23 @@ export class BooksController {
 
   @Get()
   async getBooks(): Promise<Book[]> {
-    const books = await this.bookService.findAll();
-    return books;
+    return await this.bookService.findAll();
   }
 
   @Get('/:id')
   async getBook(@Param('id') id: string): Promise<Book> {
-    const book = await this.bookService.findOneById(id);
-    return book;
+    return await this.bookService.findOneById(id);
   }
 
   @Post()
   async addBook(@Body() body: CreateBookDto): Promise<Book> {
-    const book = await this.bookService.create(body);
-    return book;
+    return await this.bookService.create(body);
   }
 
   @Delete('/:id')
   @HttpCode(204)
   async deleteBook(@Param('id') id: string): Promise<void> {
     await this.bookService.remove(id);
-    return null;
   }
 
   @Patch('/:id')
@@ -47,7 +43,6 @@ export class BooksController {
     @Param('id') id: string,
     @Body() body: EditBookDto,
   ): Promise<Book> {
-    const book = await this.bookService.edit(id, body);
-    return book;
+    return await this.bookService.edit(id, body);
   }
 }
