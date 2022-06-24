@@ -16,7 +16,7 @@ export class BooksService {
   ) {}
 
   async findAll(): Promise<Book[]> {
-    return this.bookModel.find().exec();
+    return await this.bookModel.find().exec();
   }
 
   async findOneById(id: string): Promise<Book> {
@@ -35,7 +35,7 @@ export class BooksService {
   async create(createBookDto: CreateBookDto): Promise<Book> {
     const createdBook = new this.bookModel(createBookDto);
     createdBook.createdAt = new Date();
-    return createdBook.save();
+    return await createdBook.save();
   }
 
   async remove(id: string): Promise<void> {
