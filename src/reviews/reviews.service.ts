@@ -77,28 +77,28 @@ export class ReviewsService {
   }
 
   async remove(id: string): Promise<void> {
-    // const review = await this.reviewModel.findById(id).exec();
+    const review = await this.reviewModel.findById(id).exec();
 
-    // const referencedUser = await this.userService.findOneById(
-    //   review.author.toString(),
-    // );
-    // const referencedBook = await this.bookService.findOneById(
-    //   review.reviewedBook.toString(),
-    // );
+    const referencedUser = await this.userService.findOneById(
+      review.authorId.toString(),
+    );
+    const referencedBook = await this.bookService.findOneById(
+      review.reviewedBookId.toString(),
+    );
 
     const result = await this.reviewModel.deleteOne({ _id: id }).exec();
     if (result.deletedCount === 0) {
       throw new NotFoundException('Could not find review with given id.');
     }
 
-    // referencedUser.reviews = referencedUser.reviews.filter(
-    //   (review) => review.toString() !== id,
-    // );
-    // await referencedUser.save();
-    // referencedBook.reviews = referencedBook.reviews.filter(
-    //   (review) => review.toString() !== id,
-    // );
-    // await referencedBook.save();
+    referencedUser.reviews = referencedUser.reviews.filter(
+      (review) => review.toString() !== id,
+    );
+    await referencedUser.save();
+    referencedBook.reviews = referencedBook.reviews.filter(
+      (review) => review.toString() !== id,
+    );
+    await referencedBook.save();
   }
 
   async edit(id: string, editReviewData: EditReviewDto) {
