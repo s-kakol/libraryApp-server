@@ -16,13 +16,19 @@ export class BooksService {
   ) {}
 
   async findAll(): Promise<Book[]> {
-    return await this.bookModel.find().exec();
+    return await this.bookModel
+      .find({})
+      .populate('reviews', { authorName: 1, content: 1, rating: 1 })
+      .exec();
   }
 
-  async findOneById(id: string): Promise<Book> {
+  async findOneById(id: string): Promise<BookDocument> {
     let result: BookDocument;
     try {
-      result = await this.bookModel.findById(id).exec();
+      result = await this.bookModel
+        .findById(id)
+        .populate('reviews', { authorName: 1, content: 1, rating: 1 })
+        .exec();
     } catch (error) {
       throw new BadRequestException('Malformed or wrong id');
     }

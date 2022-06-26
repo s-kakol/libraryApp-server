@@ -8,5 +8,6 @@ import { BooksService } from './books.service';
   imports: [MongooseModule.forFeature([{ name: 'Book', schema: BookSchema }])],
   controllers: [BooksController],
   providers: [BooksService],
+  exports: [BooksService],
 })
 export class BooksModule {}

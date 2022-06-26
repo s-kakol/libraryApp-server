@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
+import { Review } from 'src/reviews/schemas/review.schema';
 
 export type BookDocument = Book & Document;
 
@@ -17,8 +18,12 @@ export class Book {
   @Prop({ required: true })
   publicationYear: number;
 
-  @Prop({ required: true, type: [String] })
-  reviews: string[];
+  @Prop({
+    required: true,
+    type: Array<mongoose.Schema.Types.ObjectId>,
+    ref: 'Review',
+  })
+  reviews: Review[];
 
   @Prop({ required: true, type: [String] })
   genre: string[];
@@ -49,7 +54,7 @@ export class Book {
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book).set('toJSON', {
-  transform: (document, returnedObject) => {
+  transform: (_document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;

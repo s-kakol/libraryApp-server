@@ -17,13 +17,19 @@ export class UserService {
   ) {}
 
   async findAll(): Promise<User[]> {
-    return await this.userModel.find().exec();
+    return await this.userModel
+      .find({})
+      .populate('reviews', { reviewedBookTitle: 1, content: 1, rating: 1 })
+      .exec();
   }
 
-  async findOneById(id: string): Promise<User> {
+  async findOneById(id: string): Promise<UserDocument> {
     let result: UserDocument;
     try {
-      result = await this.userModel.findById(id).exec();
+      result = await this.userModel
+        .findById(id)
+        .populate('reviews', { reviewedBookTitle: 1, content: 1, rating: 1 })
+        .exec();
     } catch (error) {
       throw new BadRequestException('Malformed or wrong id');
     }
@@ -36,7 +42,10 @@ export class UserService {
   async findOneByEmail(email: string): Promise<User> {
     let result: User;
     try {
-      result = await this.userModel.findOne({ email }).exec();
+      result = await this.userModel
+        .findOne({ email })
+        .populate('reviews', { reviewedBookTitle: 1, content: 1, rating: 1 })
+        .exec();
     } catch (error) {
       throw new BadRequestException('Malformed or wrong email');
     }

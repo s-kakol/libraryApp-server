@@ -1,17 +1,18 @@
-import { IsNumber, IsString, Max, Min } from 'class-validator';
+import { IsMongoId, IsNumber, IsString, Max, Min } from 'class-validator';
+import mongoose from 'mongoose';
 
 export class CreateReviewDto {
-  @IsString()
-  author: string;
+  @IsMongoId()
+  authorId: mongoose.Schema.Types.ObjectId;
 
   @IsString()
   content: string;
 
-  @IsString()
-  reviewedBook: string;
+  @IsMongoId()
+  reviewedBookId: mongoose.Schema.Types.ObjectId;
 
   @Min(1)
   @Max(5)
   @IsNumber()
-  ranking: number;
+  rating: number;
 }
