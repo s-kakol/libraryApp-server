@@ -7,6 +7,7 @@ import { ConfigurationModule } from './config/configuration.module';
 import { ConfigurationService } from './config/configuration.service';
 import { BooksModule } from './books/books.module';
 import { UserModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UserModule } from './users/users.module';
     }),
     BooksModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

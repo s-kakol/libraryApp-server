@@ -5,10 +5,12 @@ import { Injectable } from '@nestjs/common';
 export class ConfigurationService {
   private readonly _dbConnectionString!: string;
   private readonly _serverPort!: number;
+  private readonly _jwtSecret!: string;
 
   constructor(private readonly _configService: ConfigService) {
     this._dbConnectionString = this._getDbConnectionStringFromEnvFile();
     this._serverPort = this._getServerPortFromEnvFile();
+    this._jwtSecret = this._getJwtSecretFromEnvFile();
   }
 
   get dbConnectionString(): string {
@@ -17,6 +19,10 @@ export class ConfigurationService {
 
   get serverPort(): number {
     return this._serverPort;
+  }
+
+  get jwtSecret(): string {
+    return this._jwtSecret;
   }
 
   private _getDbConnectionStringFromEnvFile(): string {
@@ -35,5 +41,14 @@ export class ConfigurationService {
     }
 
     return serverPort;
+  }
+
+  private _getJwtSecretFromEnvFile(): string {
+    const jwtSecret = this._configService.get<string>('JWT_SECRET');
+    if (!jwtSecret) {
+      throw new Error('No JWT secret has been provided!');
+    }
+
+    return jwtSecret;
   }
 }
