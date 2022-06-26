@@ -27,7 +27,7 @@ export class UserService {
       throw new BadRequestException('Malformed or wrong id');
     }
     if (!result) {
-      throw new NotFoundException('Could not find book with given id.');
+      throw new NotFoundException('Could not find user with given id.');
     }
     return result;
   }
@@ -41,7 +41,7 @@ export class UserService {
   async remove(id: string): Promise<void> {
     const result = await this.userModel.deleteOne({ _id: id }).exec();
     if (result.deletedCount === 0) {
-      throw new NotFoundException('Could not find book with given id.');
+      throw new NotFoundException('Could not find user with given id.');
     }
   }
 
