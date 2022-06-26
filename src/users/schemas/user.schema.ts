@@ -26,7 +26,7 @@ export class User {
 
   @Prop({
     required: true,
-    type: Array<mongoose.Schema.Types.ObjectId>,
+    type: Array(mongoose.Schema.Types.ObjectId),
     ref: 'Review',
   })
   reviews: Review[];
