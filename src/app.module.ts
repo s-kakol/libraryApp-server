@@ -3,21 +3,26 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RequestLoggerMiddleware } from './middleware/requestLogger.middleware';
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
-import { ConfigurationModule } from './config/configuration.module';
-import { ConfigurationService } from './config/configuration.service';
 import { BooksModule } from './books/books.module';
 import { UserModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { configValidationSchema } from './config/config.schema';
 
 @Module({
   imports: [
-    ConfigurationModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['./.env'],
+      validationSchema: configValidationSchema,
+      cache: true,
+    }),
     MongooseModule.forRootAsync({
-      imports: [ConfigurationModule],
-      inject: [ConfigurationService],
-      useFactory: (configurationService: ConfigurationService) => {
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
         const options: MongooseModuleOptions = {
-          uri: configurationService.dbConnectionString,
+          uri: configService.get('MONGODB_URI'),
           useNewUrlParser: true,
           useUnifiedTopology: true,
           retryWrites: true,
