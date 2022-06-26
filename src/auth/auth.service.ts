@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
@@ -39,12 +43,19 @@ export class AuthService {
     return await bcrypt.compare(password, hashedPassword);
   }
 
-  async login(userData: LoginUserDto): Promise<{ token: string }> {
-    const user = await this.userService.findOneByEmail(userData.email);
-    if (await this.passwordsMatch(userData.password, user.password)) {
-      const jwt = await this.jwtService.signAsync({ user });
-      return { token: jwt };
+  async validateUser(email: string, password: string): Promise<User> {
+    const user = await this.userService.findOneByEmail(email);
+    if (await this.passwordsMatch(password, user.password)) {
+      return user;
     }
-    throw new BadRequestException('Incorrect password!');
+  }
+
+  async login(userData: LoginUserDto): Promise<{ token: string }> {
+    const user = await this.validateUser(userData.email, userData.password);
+
+    if (!user) throw new UnauthorizedException('Invalid credentials!');
+
+    const jwt = await this.jwtService.signAsync({ user });
+    return { token: jwt };
   }
 }
