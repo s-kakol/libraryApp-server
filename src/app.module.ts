@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config/config.schema';
 import { ReviewsModule } from './reviews/reviews.module';
+import { ReservationModule } from './reservations/reservations.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     UserModule,
     AuthModule,
     ReviewsModule,
+    ReservationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
