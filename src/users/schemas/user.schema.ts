@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
+import { Reservation } from 'src/reservations/schemas/reservation.schema';
 import { Review } from 'src/reviews/schemas/review.schema';
 
 export type UserDocument = User & Document;
@@ -31,8 +32,12 @@ export class User {
   })
   reviews: Review[];
 
-  @Prop({ required: true })
-  reservations: string[];
+  @Prop({
+    required: true,
+    type: Array(mongoose.Schema.Types.ObjectId),
+    ref: 'Reservation',
+  })
+  reservations: Reservation[];
 
   @Prop({ required: true })
   createdAt: Date;

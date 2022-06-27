@@ -20,6 +20,12 @@ export class UserService {
     return await this.userModel
       .find({})
       .populate('reviews', { reviewedBookTitle: 1, content: 1, rating: 1 })
+      .populate('reservations', {
+        status: 1,
+        comment: 1,
+        deadline: 1,
+        books: 1,
+      })
       .exec();
   }
 
@@ -29,6 +35,12 @@ export class UserService {
       result = await this.userModel
         .findById(id)
         .populate('reviews', { reviewedBookTitle: 1, content: 1, rating: 1 })
+        .populate('reservations', {
+          status: 1,
+          comment: 1,
+          deadline: 1,
+          books: 1,
+        })
         .exec();
     } catch (error) {
       throw new BadRequestException('Malformed or wrong id');
@@ -45,6 +57,12 @@ export class UserService {
       result = await this.userModel
         .findOne({ email })
         .populate('reviews', { reviewedBookTitle: 1, content: 1, rating: 1 })
+        .populate('reservations', {
+          status: 1,
+          comment: 1,
+          deadline: 1,
+          books: 1,
+        })
         .exec();
     } catch (error) {
       throw new BadRequestException('Malformed or wrong email');
