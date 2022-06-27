@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Min } from 'class-validator';
 import mongoose, { Document } from 'mongoose';
 import { Review } from 'src/reviews/schemas/review.schema';
 
@@ -37,6 +38,7 @@ export class Book {
   @Prop({ required: true })
   copiesTotal: number;
 
+  @Min(0)
   @Prop({ required: true })
   copiesAvailable: number;
 
