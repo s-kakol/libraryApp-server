@@ -52,23 +52,23 @@ export class ReviewsService {
   async create(createReviewDto: CreateReviewDto): Promise<Review> {
     const createdReview = new this.reviewModel(createReviewDto);
 
-    const referencedUser = await this.userService.findOneById(
+    const refUser = await this.userService.findOneById(
       createReviewDto.authorId.toString(),
     );
-    const referencedBook = await this.bookService.findOneById(
+    const refBook = await this.bookService.findOneById(
       createReviewDto.reviewedBookId.toString(),
     );
 
     try {
       createdReview.createdAt = new Date();
-      createdReview.authorName = referencedUser.username;
-      createdReview.reviewedBookTitle = referencedBook.title;
+      createdReview.authorName = refUser.username;
+      createdReview.reviewedBookTitle = refBook.title;
       const newReview = await createdReview.save();
 
-      referencedUser.reviews = referencedUser.reviews.concat(newReview._id);
-      await referencedUser.save();
-      referencedBook.reviews = referencedBook.reviews.concat(newReview._id);
-      await referencedBook.save();
+      refUser.reviews = refUser.reviews.concat(newReview._id);
+      await refUser.save();
+      refBook.reviews = refBook.reviews.concat(newReview._id);
+      await refBook.save();
 
       return newReview;
     } catch (error) {
@@ -79,10 +79,10 @@ export class ReviewsService {
   async remove(id: string): Promise<void> {
     const review = await this.reviewModel.findById(id).exec();
 
-    const referencedUser = await this.userService.findOneById(
+    const refUser = await this.userService.findOneById(
       review.authorId.toString(),
     );
-    const referencedBook = await this.bookService.findOneById(
+    const refBook = await this.bookService.findOneById(
       review.reviewedBookId.toString(),
     );
 
@@ -91,14 +91,14 @@ export class ReviewsService {
       throw new NotFoundException('Could not find review with given id.');
     }
 
-    referencedUser.reviews = referencedUser.reviews.filter(
+    refUser.reviews = refUser.reviews.filter(
       (review) => review.toString() !== id,
     );
-    await referencedUser.save();
-    referencedBook.reviews = referencedBook.reviews.filter(
+    await refUser.save();
+    refBook.reviews = refBook.reviews.filter(
       (review) => review.toString() !== id,
     );
-    await referencedBook.save();
+    await refBook.save();
   }
 
   async edit(id: string, editReviewData: EditReviewDto) {
