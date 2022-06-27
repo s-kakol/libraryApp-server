@@ -70,6 +70,8 @@ export class ReviewsService {
       refBook.reviews = refBook.reviews.concat(newReview._id);
       await refBook.save();
 
+      await this.bookService.updateRating(refBook._id.toString());
+
       return newReview;
     } catch (error) {
       throw new Error(error.message);
@@ -99,11 +101,19 @@ export class ReviewsService {
       (review) => review.toString() !== id,
     );
     await refBook.save();
+
+    await this.bookService.updateRating(refBook._id.toString());
   }
 
   async edit(id: string, editReviewData: EditReviewDto) {
-    return await this.reviewModel.findByIdAndUpdate(id, editReviewData, {
-      new: true,
-    });
+    const result = await this.reviewModel.findByIdAndUpdate(
+      id,
+      editReviewData,
+      {
+        new: true,
+      },
+    );
+    await this.bookService.updateRating(id);
+    return result;
   }
 }

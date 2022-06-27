@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Min } from 'class-validator';
+import { Max, Min } from 'class-validator';
 import mongoose, { Document } from 'mongoose';
 import { Review } from 'src/reviews/schemas/review.schema';
 import { BookGenre } from './book-genre.model';
@@ -45,6 +45,11 @@ export class Book {
 
   @Prop({ required: true })
   price: number;
+
+  @Min(0)
+  @Max(5)
+  @Prop()
+  rating: number;
 
   @Prop({ required: true })
   pages: number;

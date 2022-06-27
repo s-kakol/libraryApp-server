@@ -52,8 +52,25 @@ export class BooksService {
   }
 
   async edit(id: string, editBookData: EditBookDto) {
-    return await this.bookModel.findByIdAndUpdate(id, editBookData, {
+    const result = await this.bookModel.findByIdAndUpdate(id, editBookData, {
       new: true,
     });
+    await this.updateRating(id);
+    return result;
+  }
+
+  async updateRating(id: string) {
+    const book = await this.findOneById(id);
+    if (book.reviews.length === 0) {
+      book.rating = 0;
+      await book.save();
+    } else {
+      const total = book.reviews.reduce(
+        (sum, review) => sum + review.rating,
+        0,
+      );
+      book.rating = total / book.reviews.length;
+      await book.save();
+    }
   }
 }
