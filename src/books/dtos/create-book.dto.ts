@@ -1,4 +1,5 @@
-import { IsArray, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsEnum, IsNumber, IsString } from 'class-validator';
+import { BookGenre } from '../schemas/book-genre.model';
 
 export class CreateBookDto {
   @IsString()
@@ -16,8 +17,8 @@ export class CreateBookDto {
   @IsArray()
   reviews: string[];
 
-  @IsArray()
-  genre: string[];
+  @IsEnum(BookGenre, { each: true })
+  genre: [BookGenre];
 
   @IsString()
   description: string;

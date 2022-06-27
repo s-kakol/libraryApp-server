@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Min } from 'class-validator';
 import mongoose, { Document } from 'mongoose';
 import { Review } from 'src/reviews/schemas/review.schema';
+import { BookGenre } from './book-genre.model';
 
 export type BookDocument = Book & Document;
 
@@ -26,8 +27,8 @@ export class Book {
   })
   reviews: Review[];
 
-  @Prop({ required: true, type: [String] })
-  genre: string[];
+  @Prop({ required: true })
+  genre: [BookGenre];
 
   @Prop({ required: true })
   description: string;
