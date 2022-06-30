@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 import { Book, BookDocument } from './schemas/book.schema';
 import { CreateBookDto } from './dtos/create-book.dto';
 import { EditBookDto } from './dtos/edit-book.dto';
+import { BookGenre } from './schemas/book-genre.model';
 
 @Injectable()
 export class BooksService {
@@ -20,6 +21,14 @@ export class BooksService {
       .find({})
       .populate('reviews', { authorName: 1, content: 1, rating: 1 })
       .exec();
+  }
+
+  async findAllByGenre(genre: string): Promise<Book[]> {
+    if (!Object.values(BookGenre).includes(genre as BookGenre)) {
+      throw new BadRequestException('Invalid book genre');
+    }
+    const books = await this.findAll();
+    return books.filter((book) => book.genre.includes(genre as BookGenre));
   }
 
   async findOneById(id: string): Promise<BookDocument> {
