@@ -10,6 +10,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config/config.schema';
 import { ReviewsModule } from './reviews/reviews.module';
 import { ReservationModule } from './reservations/reservations.module';
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { ReservationModule } from './reservations/reservations.module';
     AuthModule,
     ReviewsModule,
     ReservationModule,
+    NewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
