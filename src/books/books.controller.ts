@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { Book } from './schemas/book.schema';
@@ -18,13 +19,20 @@ export class BooksController {
   constructor(private readonly bookService: BooksService) {}
 
   @Get()
-  async getBooks(): Promise<Book[]> {
-    return await this.bookService.findAll();
+  async getBooks(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ): Promise<Book[]> {
+    return await this.bookService.findAll(page, limit);
   }
 
   @Get('/genre/:genre')
-  async getBooksByGenre(@Param('genre') genre: string): Promise<Book[]> {
-    return await this.bookService.findAllByGenre(genre);
+  async getBooksByGenre(
+    @Param('genre') genre: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ): Promise<Book[]> {
+    return await this.bookService.findAllByGenre(genre, page, limit);
   }
 
   @Get('/:id')

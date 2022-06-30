@@ -16,19 +16,41 @@ export class BooksService {
     @InjectModel(Book.name) private readonly bookModel: Model<BookDocument>,
   ) {}
 
-  async findAll(): Promise<Book[]> {
-    return await this.bookModel
+  async findAll(page?: number, limit?: number): Promise<Book[]> {
+    const books = await this.bookModel
       .find({})
       .populate('reviews', { authorName: 1, content: 1, rating: 1 })
       .exec();
+
+    if (!isNaN(page) && !isNaN(limit)) {
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      return books.slice(startIndex, endIndex);
+    }
+
+    return books;
   }
 
-  async findAllByGenre(genre: string): Promise<Book[]> {
+  async findAllByGenre(
+    genre: string,
+    page?: number,
+    limit?: number,
+  ): Promise<Book[]> {
     if (!Object.values(BookGenre).includes(genre as BookGenre)) {
       throw new BadRequestException('Invalid book genre');
     }
     const books = await this.findAll();
-    return books.filter((book) => book.genre.includes(genre as BookGenre));
+    const booksFiltered = books.filter((book) =>
+      book.genre.includes(genre as BookGenre),
+    );
+
+    if (!isNaN(page) && !isNaN(limit)) {
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      return booksFiltered.slice(startIndex, endIndex);
+    }
+
+    return booksFiltered;
   }
 
   async findOneById(id: string): Promise<BookDocument> {
