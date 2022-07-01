@@ -6,9 +6,7 @@ import {
   HttpCode,
   Param,
   Patch,
-  Post,
 } from '@nestjs/common';
-import { CreateUserDto } from './dtos/create-user.dto';
 import { EditUserDto } from './dtos/edit-user.dto';
 import { User } from './schemas/user.schema';
 import { UserService } from './users.service';
@@ -23,13 +21,13 @@ export class UserController {
   }
 
   @Get('/:id')
-  async getUser(@Param('id') id: string): Promise<User> {
+  async getUserById(@Param('id') id: string): Promise<User> {
     return await this.userService.findOneById(id);
   }
 
-  @Post()
-  async addUser(@Body() body: CreateUserDto): Promise<User> {
-    return await this.userService.create(body);
+  @Get('/em/:email')
+  async getUserByEmail(@Param('email') email: string): Promise<User> {
+    return await this.userService.findOneByEmail(email);
   }
 
   @Delete('/:id')
